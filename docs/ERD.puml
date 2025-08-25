@@ -1,7 +1,5 @@
 @startuml
 
-
-
 entity users{
 	*id :Primary key
 	--
@@ -13,39 +11,62 @@ entity users{
 	updated_at :Date
 }
 
+note right of users
+  Armazena informações dos usuários do sistema.
+  role define o tipo de usuário (ex: receptionist, nurse, doctor).
+end note
+
 entity patients{
 	*id :Primary key
 	--
 	name :String
+	suggested_priority :String
 	priority: String
-        created_at :Date
-        updated_at :Date	
+    created_at :Date
+    updated_at :Date	
 }
 
+note left of patients
+  Armazena informações dos pacientes.
+  suggested_priority é a prioridade sugerida automaticamente.
+  priority é a prioridade final definida pelo responsável pela triagem.
+end note
+
 entity triages_queue{
-        *id :Primary key
+    *id :Primary key
 	--
 	user_id :Foreign Key
 	patient_id :Foreign Key
-        created_at :Date
-        updated_at :Date
+	status :String
+    created_at :Date
+    updated_at :Date
 }
 
+note right of triages_queue
+  Fila de triagem de pacientes.
+  status varia entre WAITING, IN_PROGRESS,  DONE
+end note
 
 entity priorities_queue{
-        *id :Primary key
+    *id :Primary key
 	--
 	patient_id :Foreign Key
 	user_id
-        created_at :Date
-        updated_at :Date
+	status :String
+    created_at :Date
+    updated_at :Date
 }
 
-users ||--o{ triages_queue
-patients ||--o{ triages_queue
+note left of priorities_queue
+  Fila de atendimento.
+  status varia entre WAITING, IN_PROGRESS,  DONE
+end note
 
-users ||--o{ priorities_queue
-patients ||--o{ priorities_queue
+users ||--|{ triages_queue
+patients ||--|{ triages_queue
 
+users ||--|{ priorities_queue
+patients ||--|{ priorities_queue
 
 @enduml
+
