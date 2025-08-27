@@ -1,14 +1,32 @@
 @startuml
 
-entity users{
-	*id :Primary key
+entity tenants{
+	*id :PRIMARY KEY
 	--
-	name :String
-	email :String
-	password :String
-	role :String
-	created_at :Date
-	updated_at :Date
+	name :VARCHAR NOT NULL
+	type :VARCHAR NOT NULL
+	city :VARCHAR NOT NULL
+        created_at :DATE
+        updated_at :DATE
+}
+
+note right of tenants
+  Armazena informações dos clientes do sistema.
+  Pode representar hospitais, prefeituras ou outras instituições.
+  Contém dados essenciais para identificação e filtragem por tenant.
+end note
+
+
+entity users{
+	*id :PRIMARY KEY
+	--
+	tenant_id :FOREIGN KEY NOT NULL
+	name :VARCHAR NOT NULL
+	email :VARCHAR NOT NULL
+	password :VARCHAR NOT NULL
+	role :VARCHAR
+	created_at :DATE
+	updated_at :DATE
 }
 
 note right of users
@@ -17,13 +35,14 @@ note right of users
 end note
 
 entity patients{
-	*id :Primary key
+	*id :PRIMARY KEY
 	--
-	name :String
-	suggested_priority :String
-	priority: String
-    created_at :Date
-    updated_at :Date	
+	tenant_id :FOREIGN KEY NOT NULL
+	name :VARCHAR
+	suggested_priority :VARCHAR
+	priority: VARCHAR
+	created_at :DATE
+	updated_at :DATE	
 }
 
 note left of patients
@@ -33,13 +52,14 @@ note left of patients
 end note
 
 entity triages_queue{
-    *id :Primary key
+    *id :PRIMARY KEY
 	--
-	user_id :Foreign Key
-	patient_id :Foreign Key
-	status :String
-    created_at :Date
-    updated_at :Date
+	user_id :FOREIGN KEY
+	patient_id :FOREIGN KEY NOT NULL
+	tenant_id :FOREIGN KEY NOT NULL
+	status :VARCHAR NOT NULL
+	created_at :DATE
+	updated_at :DATE
 }
 
 note right of triages_queue
@@ -48,13 +68,14 @@ note right of triages_queue
 end note
 
 entity priorities_queue{
-    *id :Primary key
+	*id :PRIMARY KEY
 	--
-	patient_id :Foreign Key
-	user_id
-	status :String
-    created_at :Date
-    updated_at :Date
+	patient_id :FOREIGN KEY
+	user_id :FOREIGN KEY NOT NULL
+	tenant_id :FOREIGN KEY NOT NULL
+	status :VARCHAR NOT NULL
+ 	created_at :DATE
+	updated_at :DATE
 }
 
 note left of priorities_queue
@@ -68,5 +89,9 @@ patients ||--|{ triages_queue
 users ||--|{ priorities_queue
 patients ||--|{ priorities_queue
 
+tenants ||--o{ users
+tenants ||--o{ patients
+tenants ||--o{ priorities_queue
+tenants ||--o{ triages_queue
 @enduml
 
