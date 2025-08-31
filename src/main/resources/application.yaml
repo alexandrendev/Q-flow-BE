@@ -1,5 +1,14 @@
-spring.application.name=Qflow
-spring.datasource.driver-class-name=org.postgresql.Driver
-spring.datasource.url=
-spring.datasource.username=
-spring.datasource.password=
+spring:
+  application:
+    name: Qflow
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/qflow
+    username: root
+    password: root
+  main:
+    banner-mode: console
+
+
+jwt:
+  secret: ${JWT_SECRET:mysecretkey}
