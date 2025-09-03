@@ -28,6 +28,7 @@ public class SecurityConfiguration {
             .httpBasic(b -> b.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/public/**").permitAll()
                 .anyRequest().authenticated()
