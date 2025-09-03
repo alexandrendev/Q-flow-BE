@@ -4,6 +4,7 @@ public enum Role {
     RECEPTIONIST("receptionist", 1),
     NURSE("nurse", 2),
     DOCTOR("doctor", 3),
+    ADMIN("admin", 4)
     ;
 
     private String roleName;

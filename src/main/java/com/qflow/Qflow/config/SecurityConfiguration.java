@@ -28,10 +28,11 @@ public class SecurityConfiguration {
             .httpBasic(b -> b.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/public/**").permitAll()
-                .anyRequest().authenticated()
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                    .requestMatchers("/auth/login").permitAll()
+                    .requestMatchers("/auth/register").hasRole("admin")
+                    .requestMatchers(HttpMethod.POST, "/api/public/**").permitAll()
+                    .anyRequest().authenticated()
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class )
             .build();
