@@ -12,13 +12,27 @@ import com.qflow.Qflow.core.handler.Imp.yellow.ModerateBleedingHandler;
 import com.qflow.Qflow.core.handler.Imp.yellow.ModeratePainHandler;
 import com.qflow.Qflow.core.handler.Imp.yellow.TemperatureHandler;
 import com.qflow.Qflow.core.handler.Imp.yellow.TraumaModerate;
+import com.qflow.Qflow.core.handler.PrioritySuggestionHandler;
 
 public class SuggestPriorityUseCase {
+    private SetPatientSuggestedPriorityUseCase setPatientSuggestedPriorityUseCase;
 
-    public ManchesterPriority execute(TriageForm form) {
+    public SuggestPriorityUseCase(SetPatientSuggestedPriorityUseCase setPatientSuggestedPriorityUseCase) {
+        this.setPatientSuggestedPriorityUseCase = setPatientSuggestedPriorityUseCase;
+    }
+
+    public ManchesterPriority execute(TriageForm form, Long patientId) {
+        var chain = buildChain();
+        var priority = chain.handleRequest(form);
+
+        setPatientSuggestedPriorityUseCase.execute(priority, patientId);
+
+        return priority;
+    }
+
+    private PrioritySuggestionHandler buildChain() {
         var h1 = new ImmediateDeathRiskHandler();
         var h2 = new CardiorespiratoryArrestHandler();
-
         var h3 = new SevereRespiratoryDistressHandler();
         var h4 = new GlasgowCriticalHandler();
         var h5 = new SevereTraumaHandler();
@@ -33,14 +47,9 @@ public class SuggestPriorityUseCase {
         var h14 = new ModerateBleedingHandler();
         var h15 = new TemperatureHandler();
         var h16 = new TraumaModerate();
-
         var h17 = new MildPainHandler();
         var h18 = new MildSymptomsStableHandler();
         var h19 = new ChronicIssueHandler();
-
-
-
-
 
         h1.setNext(h2)
                 .setNext(h3)
@@ -61,7 +70,7 @@ public class SuggestPriorityUseCase {
                 .setNext(h18)
                 .setNext(h19);
 
-
-        return h1.handleRequest(form);
+        return h1;
     }
+
 }

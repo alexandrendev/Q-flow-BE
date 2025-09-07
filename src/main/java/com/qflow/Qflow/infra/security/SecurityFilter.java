@@ -1,6 +1,6 @@
 package com.qflow.Qflow.infra.security;
 
-import com.qflow.Qflow.infra.repository.user.UserRepository;
+import com.qflow.Qflow.core.ports.UserRepository;
 import com.qflow.Qflow.infra.security.jwt.JwtTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -31,6 +31,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                     .requestMatchers("/auth/login").permitAll()
                     .requestMatchers("/auth/register").hasRole("admin")
+                    .requestMatchers(HttpMethod.PATCH, "/patients/set-priority").hasRole("nurse")
                     .requestMatchers(HttpMethod.POST, "/api/public/**").permitAll()
                     .anyRequest().authenticated()
             )

@@ -1,4 +1,6 @@
-package com.qflow.Qflow.core.entity.user;
+package com.qflow.Qflow.api.requests.auth;
+
+import com.qflow.Qflow.core.entity.user.Role;
 
 public record RegisterDTO(
         Long tenantId,

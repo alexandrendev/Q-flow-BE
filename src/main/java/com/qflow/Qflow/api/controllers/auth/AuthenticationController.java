@@ -1,9 +1,9 @@
-package com.qflow.Qflow.controllers;
+package com.qflow.Qflow.api.controllers.auth;
 
-import com.qflow.Qflow.core.entity.user.AuthenticationDTO;
-import com.qflow.Qflow.core.entity.user.RegisterDTO;
+import com.qflow.Qflow.api.requests.auth.AuthenticationDTO;
+import com.qflow.Qflow.api.requests.auth.RegisterDTO;
 import com.qflow.Qflow.core.entity.user.User;
-import com.qflow.Qflow.infra.repository.user.UserRepository;
+import com.qflow.Qflow.core.ports.UserRepository;
 import com.qflow.Qflow.infra.security.jwt.JwtTokenService;
 import com.qflow.Qflow.infra.security.MyUserDetails;
 import jakarta.validation.Valid;

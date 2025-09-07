@@ -2,6 +2,7 @@ package com.qflow.Qflow.infra.repository.user;
 
 import com.qflow.Qflow.core.entity.user.Role;
 import com.qflow.Qflow.core.entity.user.User;
+import com.qflow.Qflow.core.ports.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Map;
 
 @Repository
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 

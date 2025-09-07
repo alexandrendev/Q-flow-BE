@@ -1,4 +1,4 @@
-package com.qflow.Qflow.infra.repository.user;
+package com.qflow.Qflow.core.ports;
 
 import com.qflow.Qflow.core.entity.user.User;
 
