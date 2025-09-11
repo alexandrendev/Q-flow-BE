@@ -1,7 +1,7 @@
 package com.qflow.Qflow.api.requests.patient;
 
-public record UpdatePatientRequest(
-        String name,
+public record FindPatientByIdRequest(
+        Long patientId,
         Long tenantId
 ) {
 }

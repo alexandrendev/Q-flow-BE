@@ -38,17 +38,35 @@ public class PatientRepositoryImpl implements PatientRepository {
 
     @Override
     public Patient findById(Long id) {
-        String sql = "SELECT * FROM patient WHERE id = :id";
+        String sql = "SELECT * FROM patients p WHERE p.id = :id";
 
         var params = Map.of("id", id);
 
-        var patient = jdbcTemplate.query(sql, params, (rs, rowNum) ->
-                new Patient(
-                        rs.getString("name")
-                )
-        );
+        var patient = jdbcTemplate.query(sql, params, (rs, rowNum) -> {
+            ManchesterPriority suggested = rs.getString("suggested_priority") != null
+                    ? ManchesterPriority.valueOf(rs.getString("suggested_priority"))
+                    : null;
+
+            ManchesterPriority priority = rs.getString("priority") != null
+                    ? ManchesterPriority.valueOf(rs.getString("priority"))
+                    : null;
+
+            return new Patient(
+                    rs.getLong("id"),
+                    rs.getString("name"),
+                    rs.getLong("tenant_id"),
+                    suggested,
+                    priority,
+                    rs.getTimestamp("created_at").toLocalDateTime(),
+                    rs.getTimestamp("updated_at").toLocalDateTime()
+            );
+        });
 
         return patient.isEmpty() ? null : patient.get(0);
+    }
+
+    private ManchesterPriority toPriority(String value) {
+        return value != null ? ManchesterPriority.valueOf(value) : null;
     }
 
     @Override
@@ -64,9 +82,26 @@ public class PatientRepositoryImpl implements PatientRepository {
     public Patient update(Patient patient) {
         String sql = "UPDATE patients SET name = :name WHERE id = :id";
         var params = Map.of(
-                "id", patient.getName(),
+                "id", patient.getId(),
                 "name", patient.getName()
         );
+
+        int rows = jdbcTemplate.update(sql, params);
+
+        return rows > 0
+                ? patient
+                : null;
+    }
+
+    @Override
+    public Patient setAssignedPriority(Patient patient) {
+        String sql = "UPDATE patients SET priority = :priority WHERE id = :id";
+        var params = Map.of(
+                "id", patient.getId(),
+                "priority", patient.getAssignedPriority().name()
+        );
+
+
 
         int rows = jdbcTemplate.update(sql, params);
 

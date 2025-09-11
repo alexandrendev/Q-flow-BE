@@ -13,19 +13,20 @@ import com.qflow.Qflow.core.handler.Imp.yellow.ModeratePainHandler;
 import com.qflow.Qflow.core.handler.Imp.yellow.TemperatureHandler;
 import com.qflow.Qflow.core.handler.Imp.yellow.TraumaModerate;
 import com.qflow.Qflow.core.handler.PrioritySuggestionHandler;
+import com.qflow.Qflow.core.ports.PatientRepository;
 
 public class SuggestPriorityUseCase {
-    private SetPatientSuggestedPriorityUseCase setPatientSuggestedPriorityUseCase;
+    private final PatientRepository repository;
 
-    public SuggestPriorityUseCase(SetPatientSuggestedPriorityUseCase setPatientSuggestedPriorityUseCase) {
-        this.setPatientSuggestedPriorityUseCase = setPatientSuggestedPriorityUseCase;
+    public SuggestPriorityUseCase(PatientRepository repository) {
+        this.repository = repository;
     }
 
     public ManchesterPriority execute(TriageForm form, Long patientId) {
         var chain = buildChain();
         var priority = chain.handleRequest(form);
 
-        setPatientSuggestedPriorityUseCase.execute(priority, patientId);
+        repository.setSuggestedPriority(priority, patientId);
 
         return priority;
     }

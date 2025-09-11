@@ -20,4 +20,5 @@ public interface PatientRepository {
 
     List<Patient> findAllByTenantId(Long tenantId);
 
+    Patient setAssignedPriority(Patient patient);
 }

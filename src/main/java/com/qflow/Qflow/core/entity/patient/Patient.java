@@ -7,7 +7,7 @@ public class Patient {
     private String name;
     private Long tenantId;
     private ManchesterPriority suggestedPriority;
-    private ManchesterPriority AssingnedPriority;
+    private ManchesterPriority assignedPriority;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -47,12 +47,12 @@ public class Patient {
         this.suggestedPriority = suggestedPriority;
     }
 
-    public ManchesterPriority getAssingnedPriority() {
-        return AssingnedPriority;
+    public ManchesterPriority getAssignedPriority() {
+        return assignedPriority;
     }
 
-    public void setAssingnedPriority(ManchesterPriority assingnedPriority) {
-        AssingnedPriority = assingnedPriority;
+    public void setAssignedPriority(ManchesterPriority assignedPriority) {
+        this.assignedPriority = assignedPriority;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -72,5 +72,15 @@ public class Patient {
     }
 
     public Patient() {
+    }
+
+    public Patient(Long id, String name, Long tenantId, ManchesterPriority suggestedPriority, ManchesterPriority assignedPriority, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.tenantId = tenantId;
+        this.suggestedPriority = suggestedPriority;
+        this.assignedPriority = assignedPriority;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }
