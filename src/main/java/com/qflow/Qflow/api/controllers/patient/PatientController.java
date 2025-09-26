@@ -28,20 +28,6 @@ public class PatientController {
     private  final PatientRepository patientRepository;
     private final SetManchesterPriorityUseCase setManchesterPriorityUseCase;
 
-
-    @Operation(
-            summary = "Creates a new Patient record",
-            description = "Returns the created Patient object with assigned ID"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "Successfully created Patient",
-                    content = @Content(
-                            mediaType = "application/json"
-                    )
-            ),
-            @ApiResponse(responseCode = "400", description = "Invalid Patient data"),
-    })
     @PostMapping("/create")
     public ResponseEntity<Patient> save(@RequestBody CreatePatientRequest request) {
         Patient patient = new Patient();
@@ -54,20 +40,6 @@ public class PatientController {
         return ResponseEntity.badRequest().build();
     }
 
-    @Operation(
-            summary = "Get Patient by ID",
-            description = "Returns the Patient object for the given ID"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "Successfully retrieved Patient",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = Patient.class)
-                    )
-            ),
-            @ApiResponse(responseCode = "204", description = "Patient not found"),
-    })
     @GetMapping("/{patientId}")
     public ResponseEntity<Patient> findById(@PathVariable Long patientId) {
         Patient patient = patientRepository.findById(patientId);
@@ -78,20 +50,6 @@ public class PatientController {
     }
 
 
-    @Operation(
-            summary = "Get all Patients by Tenant ID",
-            description = "Returns a list of Patient objects for the given Tenant ID"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "Successfully retrieved Patients",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = Patient.class)
-                    )
-            ),
-            @ApiResponse(responseCode = "204", description = "No Patients found for the given Tenant ID"),
-    })
     @GetMapping("/all/{tenantId}")
     public ResponseEntity<List<Patient>> findAllByTenantId(@PathVariable Long tenantId) {
         var patients = patientRepository.findAllByTenantId(tenantId);
@@ -102,20 +60,6 @@ public class PatientController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(
-            summary = "Update an existing Patient record",
-            description = "Returns the updated Patient object"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "Successfully updated Patient",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = Patient.class)
-                    )
-            ),
-            @ApiResponse(responseCode = "400", description = "Invalid Patient data"),
-    })
     @PutMapping("/{patientId}")
     public ResponseEntity<Patient> update(@PathVariable Long patientId, @RequestBody UpdatePatientRequest request) {
         Patient patient = new Patient();
@@ -129,35 +73,12 @@ public class PatientController {
         return ResponseEntity.badRequest().build();
     }
 
-    @Operation(
-            summary = "Delete Patient by ID",
-            description = "Deletes the Patient record for the given ID"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Successfully deleted Patient"),
-            @ApiResponse(responseCode = "400", description = "Invalid Patient ID"),
-    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         patientRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(
-            summary = "Set Manchester Priority for a Patient",
-            description = "Sets the suggested Manchester Priority for the given Patient ID and returns the updated Patient object"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "Successfully updated Patient priority",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = Patient.class)
-                    )
-            ),
-            @ApiResponse(responseCode = "400", description = "Invalid Patient ID or Priority"),
-            @ApiResponse(responseCode = "204", description = "Patient not found"),
-    })
     @PatchMapping("/set-priority")
     public ResponseEntity<Patient> setManchesterPriority(
             @AuthenticationPrincipal MyUserDetails userDetails,

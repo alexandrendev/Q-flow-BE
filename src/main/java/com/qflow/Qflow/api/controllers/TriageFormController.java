@@ -17,21 +17,7 @@ public class TriageFormController {
     private final SuggestPriorityUseCase useCase;
 
 
-    @Operation(
-            summary = "Get suggested Manchester priority based on triage form",
-            description = "Returns the suggested Manchester priority for a given triage form."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "Successfully retrieved suggested priority",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ManchesterPriority.class)
-                    )
-            ),
-            @ApiResponse(responseCode = "400", description = "Invalid triage form data"),
 
-    })
     @PostMapping
     public ResponseEntity<ManchesterPriority> getSuggestedManchesterPriority(
             @RequestBody TriageForm form,
