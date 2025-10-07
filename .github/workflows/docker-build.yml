@@ -41,6 +41,6 @@ jobs:
             luizfpfonseca/q-flow-be:latest
             luizfpfonseca/q-flow-be:${{ github.sha }}
 
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # cache-from: type=gha
+          # cache-to: type=gha,mode=max
 
