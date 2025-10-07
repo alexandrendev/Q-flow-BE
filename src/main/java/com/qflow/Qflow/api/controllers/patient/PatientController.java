@@ -1,20 +1,14 @@
 package com.qflow.Qflow.api.controllers.patient;
 
 import com.qflow.Qflow.api.requests.SetManschesterPriorityRequest;
+import com.qflow.Qflow.api.requests.patient.CreatePatientRequest;
+import com.qflow.Qflow.api.requests.patient.UpdatePatientRequest;
 import com.qflow.Qflow.core.entity.patient.Patient;
 import com.qflow.Qflow.core.entity.user.User;
 import com.qflow.Qflow.core.ports.PatientRepository;
-import com.qflow.Qflow.api.requests.patient.CreatePatientRequest;
-import com.qflow.Qflow.api.requests.patient.UpdatePatientRequest;
 import com.qflow.Qflow.core.usecase.SetManchesterPriorityUseCase;
 import com.qflow.Qflow.infra.security.MyUserDetails;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
