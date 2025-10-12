@@ -40,6 +40,10 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public Long getTenantId() {
         return tenantId;
     }

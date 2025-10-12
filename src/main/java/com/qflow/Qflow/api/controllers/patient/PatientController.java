@@ -6,6 +6,7 @@ import com.qflow.Qflow.api.requests.patient.UpdatePatientRequest;
 import com.qflow.Qflow.core.entity.patient.Patient;
 import com.qflow.Qflow.core.entity.user.User;
 import com.qflow.Qflow.core.ports.PatientRepository;
+import com.qflow.Qflow.core.usecase.AddPatientToTriageQueueUseCase;
 import com.qflow.Qflow.core.usecase.SetManchesterPriorityUseCase;
 import com.qflow.Qflow.infra.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +22,22 @@ import java.util.Optional;
 public class PatientController {
     private  final PatientRepository patientRepository;
     private final SetManchesterPriorityUseCase setManchesterPriorityUseCase;
+    private final AddPatientToTriageQueueUseCase addPatientToTriageQueueUseCase;
 
     @PostMapping("/create")
-    public ResponseEntity<Patient> save(@RequestBody CreatePatientRequest request) {
+    public ResponseEntity<Patient> saveAndAddToTriageQueue(@AuthenticationPrincipal MyUserDetails userDetails, @RequestBody CreatePatientRequest request) {
         Patient patient = new Patient();
         patient.setName(request.name());
         patient.setTenantId(request.tenantId());
         Optional<Patient> optional = patientRepository.save(patient);
-        if(optional.isPresent()){
-            return ResponseEntity.ok(optional.get());
-        }
-        return ResponseEntity.badRequest().build();
+
+        if(optional.isEmpty()) return ResponseEntity.badRequest().build();
+
+        var user = userDetails.getUser();
+
+        Long queueId = this.addPatientToTriageQueueUseCase.execute(user.getId(), optional.get().getId(), user.getTenantId());
+
+        return ResponseEntity.ok().body(optional.get());
     }
 
     @GetMapping("/{patientId}")
@@ -92,8 +98,13 @@ public class PatientController {
 
 
     @Autowired
-    public PatientController(PatientRepository patientRepository, SetManchesterPriorityUseCase setManchesterPriorityUseCase) {
+    public PatientController(
+            PatientRepository patientRepository,
+            SetManchesterPriorityUseCase setManchesterPriorityUseCase,
+            AddPatientToTriageQueueUseCase addPatientToTriageQueueUseCase
+    ) {
         this.patientRepository = patientRepository;
         this.setManchesterPriorityUseCase = setManchesterPriorityUseCase;
+        this.addPatientToTriageQueueUseCase = addPatientToTriageQueueUseCase;
     }
 }
