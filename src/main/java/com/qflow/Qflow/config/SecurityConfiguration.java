@@ -30,7 +30,8 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                     .requestMatchers("/auth/login").permitAll()
-                    .requestMatchers("/auth/register").hasRole("admin")
+                    .requestMatchers("/auth/register").permitAll()
+                    .requestMatchers("/tenants/**").permitAll()
                     .requestMatchers(HttpMethod.PUT, "/patients/**").authenticated()
                     .requestMatchers(HttpMethod.PATCH, "/patients/set-priority").hasAuthority("nurse")
                     .requestMatchers(HttpMethod.POST, "/api/public/**").permitAll()

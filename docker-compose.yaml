@@ -17,18 +17,18 @@ services:
       timeout: 3s
       retries: 5
 
-  app:
-    image: qflow-teste:latest # Substitua pela imagem upada no dockerhub
-    container_name: qflow-app
-    environment:
-      DB_URL: jdbc:postgresql://db:5432/qflow
-      DB_USER: root
-      DB_PASSWORD: root
-      JWT_SECRET: mysecretkey
-    ports:
-      - "8080:8080"
-    depends_on:
-      db:
-        condition: service_healthy
+#  app:
+#    image: qflow-teste:latest # Substitua pela imagem upada no dockerhub
+#    container_name: qflow-app
+#    environment:
+#      DB_URL: jdbc:postgresql://db:5432/qflow
+#      DB_USER: root
+#      DB_PASSWORD: root
+#      JWT_SECRET: mysecretkey
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      db:
+#        condition: service_healthy
 volumes:
   pgdata:
