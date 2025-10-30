@@ -6,6 +6,7 @@ import com.qflow.Qflow.api.requests.patient.UpdatePatientRequest;
 import com.qflow.Qflow.core.entity.patient.Patient;
 import com.qflow.Qflow.core.entity.user.User;
 import com.qflow.Qflow.core.ports.PatientRepository;
+import com.qflow.Qflow.core.ports.TriageQueueRepository;
 import com.qflow.Qflow.core.usecase.AddPatientToTriageQueueUseCase;
 import com.qflow.Qflow.core.usecase.SetManchesterPriorityUseCase;
 import com.qflow.Qflow.infra.security.MyUserDetails;
@@ -23,6 +24,7 @@ public class PatientController {
     private  final PatientRepository patientRepository;
     private final SetManchesterPriorityUseCase setManchesterPriorityUseCase;
     private final AddPatientToTriageQueueUseCase addPatientToTriageQueueUseCase;
+    private final TriageQueueRepository triageQueueRepository;
 
     @PostMapping("/create")
     public ResponseEntity<Patient> saveAndAddToTriageQueue(@AuthenticationPrincipal MyUserDetails userDetails, @RequestBody CreatePatientRequest request) {
@@ -89,6 +91,7 @@ public class PatientController {
         Patient patient = setManchesterPriorityUseCase.execute(user, request.priority(), request.patientId());
 
         if (patient != null) {
+            this.triageQueueRepository.changeStatusToFinished(patient.getId());
             return ResponseEntity.ok(patient);
         }
 
@@ -101,10 +104,12 @@ public class PatientController {
     public PatientController(
             PatientRepository patientRepository,
             SetManchesterPriorityUseCase setManchesterPriorityUseCase,
-            AddPatientToTriageQueueUseCase addPatientToTriageQueueUseCase
+            AddPatientToTriageQueueUseCase addPatientToTriageQueueUseCase,
+            TriageQueueRepository triageQueueRepository
     ) {
         this.patientRepository = patientRepository;
         this.setManchesterPriorityUseCase = setManchesterPriorityUseCase;
         this.addPatientToTriageQueueUseCase = addPatientToTriageQueueUseCase;
+        this.triageQueueRepository = triageQueueRepository;
     }
 }

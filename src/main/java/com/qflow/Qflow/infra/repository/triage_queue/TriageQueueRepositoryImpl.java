@@ -32,6 +32,14 @@ public class TriageQueueRepositoryImpl implements TriageQueueRepository {
         return Long.valueOf(keyHolder.getKey().longValue());
     }
 
+    @Override
+    public void changeStatusToFinished(Long patientId) {
+        String sql = "UPDATE triage_queue SET status = 'FINISHED' WHERE patient_id = :patientId AND status <> 'FINISHED'";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("patientId", patientId);
+        jdbcTemplate.update(sql, params);
+    }
+
     @Autowired
     public TriageQueueRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
