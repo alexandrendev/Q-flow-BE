@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="15" /> <!-- atualiza a cada 15s -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel - QFlow</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: #0b1220;
+            color: #ffffff;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+        }
+        .container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            padding: 2rem;
+        }
+        .card {
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 2.5rem 3rem;
+            width: 40%;
+            min-width: 320px;
+            text-align: center;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+        }
+        .label {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #cfe8ff;
+        }
+        .number {
+            font-size: 7.5rem;
+            font-weight: 800;
+            line-height: 1;
+            color: #fff;
+        }
+        .sub {
+            font-size: 1.2rem;
+            margin-top: 0.8rem;
+            color: #b9d6ff;
+        }
+        @media (max-width: 900px) {
+            .container { flex-direction: column; gap: 1.5rem; }
+            .card { width: 90%; }
+            .number { font-size: 5.5rem; }
+            .label { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="label">Triage Queue (Aguardando)</div>
+        <div class="number" th:text="${waitingCount}">0</div>
+        <div class="sub">Total de pacientes em espera</div>
+    </div>
+
+    <div class="card">
+        <div class="label">Priorities Queue (Com prioridade)</div>
+        <div class="number" th:text="${prioritizedCount}">0</div>
+        <div class="sub">Pacientes com Manchester definido em espera</div>
+    </div>
+</div>
+</body>
+</html>
