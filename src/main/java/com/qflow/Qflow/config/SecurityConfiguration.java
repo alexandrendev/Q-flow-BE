@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/auth/login").permitAll()
                     .requestMatchers("/auth/register").permitAll()
                     .requestMatchers("/tenants/**").permitAll()
+                    .requestMatchers("/tv-panel/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/triage-form").hasAuthority("nurse")
                     .requestMatchers(HttpMethod.PUT, "/patients/**").authenticated()
                     .requestMatchers(HttpMethod.PATCH, "/patients/set-priority").hasAuthority("nurse")
