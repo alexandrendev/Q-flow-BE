@@ -2,10 +2,7 @@ package com.qflow.Qflow.config;
 
 import com.qflow.Qflow.core.ports.PatientRepository;
 import com.qflow.Qflow.core.ports.TriageQueueRepository;
-import com.qflow.Qflow.core.usecase.AddPatientToPrioritiesQueue;
-import com.qflow.Qflow.core.usecase.AddPatientToTriageQueueUseCase;
-import com.qflow.Qflow.core.usecase.SetManchesterPriorityUseCase;
-import com.qflow.Qflow.core.usecase.SuggestPriorityUseCase;
+import com.qflow.Qflow.core.usecase.*;
 import com.qflow.Qflow.infra.repository.patient.PatientRepositoryImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,5 +23,10 @@ public class Bootstrap {
     @Bean
     public AddPatientToTriageQueueUseCase addPatientToTriageQueue(TriageQueueRepository repository) {
         return new AddPatientToTriageQueueUseCase(repository);
+    }
+
+    @Bean
+    public GetNextPatientUseCase getNextPatientUseCase(TriageQueueRepository repository) {
+        return new GetNextPatientUseCase(repository);
     }
 }
