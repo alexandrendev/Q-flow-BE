@@ -14,3 +14,7 @@ build/
 .DS_Store
 Thumbs.db
 
+docker-compose.yaml
+rotas-api.txt
+bin/main/application.yaml
+bin/main/banner.txt

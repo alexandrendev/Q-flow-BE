@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="15" /> <!-- atualiza a cada 15s -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel - QFlow</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: linear-gradient(135deg, #005573 0%, #003d52 100%);
+            color: #ffffff;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .header {
+            padding: 2rem;
+            text-align: center;
+            background: rgba(0, 204, 179, 0.1);
+            border-bottom: 2px solid #00CCB3;
+        }
+
+        .logo-space {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            max-width: 200px;
+            max-height: 60px;
+            border-radius: 8px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00CCB3;
+            margin: 0;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            padding: 2rem;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(0, 204, 179, 0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid rgba(0, 204, 179, 0.3);
+            border-radius: 16px;
+            padding: 2.5rem 3rem;
+            width: 40%;
+            min-width: 320px;
+            text-align: center;
+            box-shadow:
+                0 8px 32px rgba(0, 85, 115, 0.3),
+                0 2px 8px rgba(0, 204, 179, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 12px 40px rgba(0, 85, 115, 0.4),
+                0 4px 16px rgba(0, 204, 179, 0.2);
+        }
+
+        .label {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #00CCB3;
+            text-shadow: 0 2px 4px rgba(0, 85, 115, 0.3);
+        }
+
+        .number {
+            font-size: 7.5rem;
+            font-weight: 800;
+            line-height: 1;
+            color: #ffffff;
+            text-shadow: 0 4px 8px rgba(0, 85, 115, 0.5);
+        }
+
+        .sub {
+            font-size: 1.2rem;
+            margin-top: 0.8rem;
+            color: #f8f9fa;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .card {
+                width: 90%;
+            }
+            .number {
+                font-size: 5.5rem;
+            }
+            .label {
+                font-size: 1.6rem;
+            }
+            .page-title {
+                font-size: 2rem;
+            }
+            .header {
+                padding: 1.5rem;
+            }
+            .logo-space {
+                height: 60px;
+            }
+            .logo {
+                max-width: 150px;
+                max-height: 40px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-space">
+            <img src="/static/logo.jpeg" alt="QFlow Logo" class="logo" />
+        </div>
+        <h1 class="page-title">QFlow Dashboard</h1>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="label">Triage Queue (Aguardando)</div>
+            <div class="number" th:text="${waitingCount}">0</div>
+            <div class="sub">Total de pacientes em espera</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Priorities Queue (Com prioridade)</div>
+            <div class="number" th:text="${prioritizedCount}">0</div>
+            <div class="sub">Pacientes com Manchester definido em espera</div>
+        </div>
+    </div>
+</body>
+</html>
