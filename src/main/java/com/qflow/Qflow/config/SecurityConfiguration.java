@@ -6,6 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,24 +30,40 @@ public class SecurityConfiguration {
         return http
             .csrf(csrf -> csrf.disable())
             .httpBasic(b -> b.disable())
+            .cors(Customizer.withDefaults())
+            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                    .requestMatchers("/auth/login").permitAll()
-                    .requestMatchers("/auth/register").permitAll()
-                    .requestMatchers("/tenants/**").permitAll()
-                    .requestMatchers("/tv-panel/**").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/triage-form").hasAuthority("nurse")
-                    .requestMatchers(HttpMethod.PUT, "/patients/**").authenticated()
-                    .requestMatchers(HttpMethod.PATCH, "/patients/set-priority").hasAuthority("nurse")
-                    .requestMatchers(HttpMethod.POST, "/api/public/**").permitAll()
-                    .anyRequest().authenticated()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/auth/login").permitAll()
+                .requestMatchers("/auth/register").permitAll()
+                .requestMatchers("/tenants/**").permitAll()
+                .requestMatchers("/tv-panel/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/triage-form/questions").authenticated()
+                .requestMatchers(HttpMethod.POST, "/triage-form").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/patients/**").authenticated()
+                .requestMatchers(HttpMethod.PATCH, "/patients/set-priority").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/public/**").permitAll()
+                .anyRequest().authenticated()
             )
-            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class )
+            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(java.util.List.of("*"));
+        configuration.setAllowedMethods(java.util.List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+        configuration.setAllowedHeaders(java.util.List.of("*"));
+        configuration.setExposedHeaders(java.util.List.of("Authorization"));
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }

@@ -1,5 +1,7 @@
 package com.qflow.Qflow.infra.repository.triage_queue;
 
+import com.qflow.Qflow.api.responses.Status;
+import com.qflow.Qflow.api.responses.TriageQueueResponse;
 import com.qflow.Qflow.core.ports.TriageQueueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -8,6 +10,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository
 public class TriageQueueRepositoryImpl implements TriageQueueRepository {
@@ -85,6 +89,27 @@ public class TriageQueueRepositoryImpl implements TriageQueueRepository {
         });
     }
 
+
+    @Override
+    public List<TriageQueueResponse> getAllWaitingPatients(Long tenantId) {
+        String sql = "SELECT id, user_id, patient_id, tenant_id, status " +
+                "FROM triage_queue " +
+                "WHERE tenant_id = :tenantId AND status = 'WAITING' " +
+                "ORDER BY created_at ASC";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("tenantId", tenantId);
+
+        return jdbcTemplate.query(sql, params, (rs, rowNum) -> 
+                new TriageQueueResponse(
+                        rs.getLong("id"),
+                        rs.getLong("user_id"),
+                        rs.getLong("patient_id"),
+                        rs.getLong("tenant_id"),
+                        Status.valueOf(rs.getString("status"))
+                )
+        );
+    }
 
     @Autowired
     public TriageQueueRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {

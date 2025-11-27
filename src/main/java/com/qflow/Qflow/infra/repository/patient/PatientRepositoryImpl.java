@@ -130,9 +130,13 @@ public class PatientRepositoryImpl implements PatientRepository {
             patient.setId(rs.getLong("id"));
             patient.setName(rs.getString("name"));
             patient.setTenantId(rs.getLong("tenant_id"));
-            String priority = rs.getString("suggested_priority");
-            if (priority != null) {
-                patient.setSuggestedPriority(ManchesterPriority.valueOf(priority));
+            String suggestedPriority = rs.getString("suggested_priority");
+            if (suggestedPriority != null) {
+                patient.setSuggestedPriority(ManchesterPriority.valueOf(suggestedPriority));
+            }
+            String assignedPriority = rs.getString("priority");
+            if (assignedPriority != null) {
+                patient.setAssignedPriority(ManchesterPriority.valueOf(assignedPriority));
             }
             patient.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
             patient.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
